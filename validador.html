@@ -60,11 +60,11 @@
 
 <script id="lista" type="application/json">
 [
-  { "codigo": "CONV-0001", "nome": "Maria Silva",   "mesa": "1" },
-  { "codigo": "CONV-0002", "nome": "João Pereira",  "mesa": "1" },
-  { "codigo": "CONV-0003", "nome": "Ana Souza",     "mesa": "2" },
-  { "codigo": "CONV-0004", "nome": "Carlos Lima",   "mesa": "2" },
-  { "codigo": "CONV-0005", "nome": "Fernanda Costa","mesa": "3" }
+  { "codigo": "CONV-0001", "nome": "Maria Silva",   "unidade": "Matriz" },
+  { "codigo": "CONV-0002", "nome": "João Pereira",  "unidade": "Matriz" },
+  { "codigo": "CONV-0003", "nome": "Ana Souza",     "unidade": "Filial SP" },
+  { "codigo": "CONV-0004", "nome": "Carlos Lima",   "unidade": "Filial SP" },
+  { "codigo": "CONV-0005", "nome": "Fernanda Costa","unidade": "Filial RJ" }
 ]
 </script>
 <script>
@@ -10185,10 +10185,10 @@ function parseLista(texto, nomeArq) {
     return (Array.isArray(j) ? j : j.convidados || []).map(c =>
       typeof c === 'string' ? { codigo: c, nome: '' } : { ...c, codigo: c.codigo ?? c.id ?? c.code });
   }
-  // TXT/CSV: uma linha por convidado -> "codigo;nome;mesa" (separador ; , ou tab); linhas com # são ignoradas
+  // TXT/CSV: uma linha por convidado -> "codigo;nome;unidade" (separador ; , ou tab); linhas com # são ignoradas
   return texto.split(/\r?\n/).map(l => l.trim()).filter(l => l && !l.startsWith('#')).map(l => {
-    const [codigo, nome, mesa] = l.split(/[;,\t]/).map(x => x.trim());
-    return { codigo, nome: nome || '', mesa: mesa || '' };
+    const [codigo, nome, unidade] = l.split(/[;,\t]/).map(x => x.trim());
+    return { codigo, nome: nome || '', unidade: unidade || '' };
   });
 }
 
@@ -10236,7 +10236,7 @@ async function validar(bruto, origem) {
     try { localStorage.setItem(LS, JSON.stringify(checkins)); } catch {}
   }
   contar();
-  const detalhe = [c.mesa && 'Mesa ' + c.mesa, c.codigo].filter(Boolean).join(' · ');
+  const detalhe = [c.unidade && 'Unidade: ' + c.unidade, c.codigo].filter(Boolean).join(' · ');
   if (ja) mostrar('warn', 'JÁ UTILIZADO', c.nome || c.codigo, `${detalhe}\nEntrou em ${ja}`);
   else    mostrar('ok', 'LIBERADO', c.nome || c.codigo, detalhe);
 }
@@ -10326,7 +10326,7 @@ $('foto').onchange = e => {
   img.src = URL.createObjectURL(f);
 };
 $('bExp').onclick = () => {
-  const linhas = ['codigo;nome;mesa;entrada', ...convidados.map(c => [c.codigo, c.nome, c.mesa || '', checkins[c.codigo] || ''].join(';'))];
+  const linhas = ['codigo;nome;unidade;entrada', ...convidados.map(c => [c.codigo, c.nome, c.unidade || '', checkins[c.codigo] || ''].join(';'))];
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob(['﻿' + linhas.join('\n')], { type: 'text/csv' }));
   a.download = 'checkins.csv'; a.click();
