@@ -1,0 +1,7 @@
+[
+  { "codigo": "CONV-0001", "nome": "Maria Silva",   "mesa": "1" },
+  { "codigo": "CONV-0002", "nome": "João Pereira",  "mesa": "1" },
+  { "codigo": "CONV-0003", "nome": "Ana Souza",     "mesa": "2" },
+  { "codigo": "CONV-0004", "nome": "Carlos Lima",   "mesa": "2" },
+  { "codigo": "CONV-0005", "nome": "Fernanda Costa","mesa": "3" }
+]
